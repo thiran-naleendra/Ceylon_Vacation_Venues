@@ -14,6 +14,7 @@ use App\Http\Controllers\Admin\PropertyTypeController;
 use App\Http\Controllers\Admin\RedirectController;
 use App\Http\Controllers\Admin\SettingsController;
 use App\Http\Controllers\Admin\TourPackageController;
+use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\VehicleCategoryController;
 use App\Http\Controllers\Admin\VehicleController;
 use Illuminate\Support\Facades\Route;
@@ -54,6 +55,7 @@ Route::prefix('admin')->name('admin.')->group(function (): void {
         Route::resource('blog-categories', BlogCategoryController::class)->except(['show']);
         Route::resource('blog', BlogPostController::class)->parameters(['blog' => 'post']);
         Route::resource('redirects', RedirectController::class)->except(['show']);
+        Route::resource('users', UserController::class);
 
         foreach ([
             'seo' => 'SEO',

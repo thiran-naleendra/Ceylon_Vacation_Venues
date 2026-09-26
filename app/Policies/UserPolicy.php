@@ -2,6 +2,7 @@
 
 namespace App\Policies;
 
+use App\Enums\UserRole;
 use App\Models\User;
 
 class UserPolicy
@@ -19,7 +20,8 @@ class UserPolicy
      */
     public function view(User $user, User $model): bool
     {
-        return $user->role->canManageAdminUsers();
+        return $user->role === UserRole::Owner
+            || ($user->role === UserRole::Administrator && $model->role !== UserRole::Owner);
     }
 
     /**
@@ -35,7 +37,7 @@ class UserPolicy
      */
     public function update(User $user, User $model): bool
     {
-        return $user->role->canManageAdminUsers();
+        return $this->view($user, $model);
     }
 
     /**
@@ -43,7 +45,7 @@ class UserPolicy
      */
     public function delete(User $user, User $model): bool
     {
-        return $user->role->canManageAdminUsers() && ! $user->is($model);
+        return $this->view($user, $model) && ! $user->is($model);
     }
 
     /**

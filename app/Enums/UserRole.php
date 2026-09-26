@@ -17,7 +17,18 @@ enum UserRole: string
 
     public function canManageAdminUsers(): bool
     {
-        return $this === self::Owner;
+        return in_array($this, [self::Owner, self::Administrator], true);
+    }
+
+    public function label(): string
+    {
+        return match ($this) {
+            self::None => 'No admin access',
+            self::Owner => 'Owner',
+            self::Administrator => 'Administrator',
+            self::Editor => 'Editor',
+            self::InquiryAgent => 'Inquiry Agent',
+        };
     }
 
     public function canPublishContent(): bool

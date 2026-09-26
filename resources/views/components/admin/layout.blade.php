@@ -15,6 +15,7 @@
         ['label' => 'SEO', 'route' => 'admin.seo.index', 'icon' => 'seo'],
         ['label' => 'Redirects', 'route' => 'admin.redirects.index', 'icon' => 'redirects'],
         ['label' => 'Settings', 'route' => 'admin.settings.index', 'icon' => 'settings'],
+        ...(auth()->user()->can('viewAny', App\Models\User::class) ? [['label' => 'Users', 'route' => 'admin.users.index', 'icon' => 'users']] : []),
         ['label' => 'Audit Logs', 'route' => 'admin.audit-logs.index', 'icon' => 'audit'],
     ];
 @endphp

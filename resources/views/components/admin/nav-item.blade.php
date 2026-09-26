@@ -50,6 +50,9 @@
             @case('settings')
                 <svg viewBox="0 0 24 24" class="size-5 fill-none stroke-current" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19 12a7 7 0 0 0-.1-1l2-1.5-2-3.4-2.4 1A7 7 0 0 0 15 6l-.3-2.6h-4L10.4 6a7 7 0 0 0-1.6.9l-2.4-1-2 3.4 2 1.6a7 7 0 0 0 0 2.2l-2 1.6 2 3.4 2.4-1a7 7 0 0 0 1.6.9l.3 2.6h4L15 18a7 7 0 0 0 1.6-.9l2.4 1 2-3.4-2-1.6c.1-.3.1-.7.1-1.1Z"/></svg>
                 @break
+            @case('users')
+                <svg viewBox="0 0 24 24" class="size-5 fill-none stroke-current" stroke-width="1.8"><path d="M16 20v-1.5a4.5 4.5 0 0 0-4.5-4.5h-3A4.5 4.5 0 0 0 4 18.5V20m6-10a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm7 1a2.5 2.5 0 1 0 0-5m1 8a4 4 0 0 1 3 3.9V20"/></svg>
+                @break
             @default
                 <svg viewBox="0 0 24 24" class="size-5 fill-none stroke-current" stroke-width="1.8"><path d="M4 4h16v16H4V4Zm4 4h8m-8 4h8m-8 4h5"/></svg>
         @endswitch
