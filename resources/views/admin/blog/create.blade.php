@@ -1,0 +1,1 @@
+<x-admin.layout title="New blog post" eyebrow="Content"><form method="POST" action="{{ route('admin.blog.store') }}" enctype="multipart/form-data">@csrf @include('admin.blog.form',['submitLabel'=>'Create post'])</form></x-admin.layout>

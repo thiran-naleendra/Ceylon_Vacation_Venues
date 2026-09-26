@@ -1,0 +1,33 @@
+@import 'tailwindcss';
+
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+
+@theme {
+    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+        'Segoe UI Symbol', 'Noto Color Emoji';
+}
+
+@theme {
+    --font-display: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif;
+}
+
+[x-cloak] { display: none !important; }
+
+.font-display { font-family: var(--font-display); }
+
+.rich-content { color: #475569; font-size: 1rem; line-height: 1.8; }
+.rich-content > * + * { margin-top: 1.25rem; }
+.rich-content h2, .rich-content h3 { color: #082d4f; font-weight: 700; line-height: 1.25; margin-top: 2rem; }
+.rich-content h2 { font-size: 1.75rem; }
+.rich-content h3 { font-size: 1.35rem; }
+.rich-content ul, .rich-content ol { padding-left: 1.4rem; }
+.rich-content ul { list-style: disc; }
+.rich-content ol { list-style: decimal; }
+.rich-content a { color: #08718b; font-weight: 600; text-decoration: underline; text-underline-offset: 3px; }
+.rich-content img { border-radius: 1.25rem; height: auto; max-width: 100%; }
+.footer-content a { color: #a5f3fc; text-decoration: underline; }
+
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; }
+}

@@ -1,0 +1,1 @@
+<x-admin.layout :title="'Edit '.$post->title" eyebrow="Content"><form method="POST" action="{{ route('admin.blog.update',$post) }}" enctype="multipart/form-data">@csrf @method('PUT') @include('admin.blog.form',['submitLabel'=>'Save changes'])</form></x-admin.layout>
