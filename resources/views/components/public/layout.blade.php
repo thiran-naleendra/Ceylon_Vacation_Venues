@@ -24,13 +24,14 @@
     $termsUrl = $sitePages->get('terms-and-conditions')['url'] ?? null;
     $navigation = array_filter([
         ['label' => 'Home', 'url' => route('home')],
-        ['label' => 'About', 'url' => $aboutUrl],
-        ['label' => 'Packages', 'url' => route('packages.index')],
+        ['label' => 'Tour Packages', 'url' => route('packages.index')],
+        ['label' => 'Villas & Houses', 'url' => route('properties.index')],
         ['label' => 'Vehicle Rental', 'url' => route('vehicles.index')],
-        ['label' => 'Visa Extension', 'url' => $visaUrl],
+        ['label' => 'Visa Assistance', 'url' => $visaUrl],
         ['label' => 'Baggage Transport', 'url' => $baggageUrl],
         ['label' => 'Gallery', 'url' => route('gallery.index')],
         ['label' => 'Blog', 'url' => route('blog.index')],
+        ['label' => 'About Us', 'url' => $aboutUrl],
         ['label' => 'Contact', 'url' => route('inquiries.contact.create')],
     ], fn($item) => filled($item['url']));
 @endphp
@@ -136,7 +137,7 @@
                 <ul class="mt-5 space-y-3 text-sm text-sky-100/70">
                     <li><a href="{{ route('packages.index') }}">Tour packages</a></li>
                     <li><a href="{{ route('vehicles.index') }}">Vehicle rental</a></li><li><a href="{{ route('properties.index') }}">Villas & Houses</a></li>@if($visaUrl)
-                    <li><a href="{{ $visaUrl }}">Visa extension</a></li>@endif @if($baggageUrl)
+                    <li><a href="{{ $visaUrl }}">Visa assistance</a></li>@endif @if($baggageUrl)
                     <li><a href="{{ $baggageUrl }}">Baggage transport</a></li>@endif<li><a
                             href="{{ route('gallery.index') }}">Gallery</a></li>
                 </ul>
@@ -171,7 +172,7 @@
             <div
                 class="mx-auto flex max-w-7xl flex-col gap-3 px-4 py-5 text-xs text-sky-100/50 sm:flex-row sm:items-center sm:justify-between sm:px-6 lg:px-8">
                 <p>© {{ date('Y') }} {{ $businessName }}. All rights reserved.</p>
-                <p>Travel across Sri Lanka, your way.</p>
+                <p>Development by WebX Tech Solutions +94769651875</p>
             </div>
         </div>
     </footer>

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\AmenityController;
+use App\Http\Controllers\Admin\AuditLogController;
 use App\Http\Controllers\Admin\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Admin\BlogCategoryController;
 use App\Http\Controllers\Admin\BlogPostController;
@@ -56,10 +57,11 @@ Route::prefix('admin')->name('admin.')->group(function (): void {
         Route::resource('blog', BlogPostController::class)->parameters(['blog' => 'post']);
         Route::resource('redirects', RedirectController::class)->except(['show']);
         Route::resource('users', UserController::class);
+        Route::get('audit-logs', [AuditLogController::class, 'index'])->name('audit-logs.index');
+        Route::get('audit-logs/{auditLog}', [AuditLogController::class, 'show'])->name('audit-logs.show');
 
         foreach ([
             'seo' => 'SEO',
-            'audit-logs' => 'Audit Logs',
         ] as $path => $title) {
             Route::view($path, 'admin.placeholder', compact('title'))->name($path.'.index');
         }

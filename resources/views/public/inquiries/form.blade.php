@@ -1,5 +1,5 @@
 @php
-    $title = match ($type) { App\Enums\InquiryType::Package => 'Enquire about ' . $subject->title, App\Enums\InquiryType::Rental => 'Rent ' . $subject->title, App\Enums\InquiryType::Property => 'Enquire about ' . $subject->name, App\Enums\InquiryType::Visa => 'Visa extension inquiry', App\Enums\InquiryType::Baggage => 'Baggage transport inquiry', default => 'Contact us'};
+    $title = match ($type) { App\Enums\InquiryType::Package => 'Enquire about ' . $subject->title, App\Enums\InquiryType::Rental => 'Rent ' . $subject->title, App\Enums\InquiryType::Property => 'Enquire about ' . $subject->name, App\Enums\InquiryType::Visa => 'Visa assistance inquiry', App\Enums\InquiryType::Baggage => 'Baggage transport inquiry', default => 'Contact us'};
     $action = match ($type) { App\Enums\InquiryType::Package => route('inquiries.package.store', $subject), App\Enums\InquiryType::Rental => route('inquiries.rental.store', $subject), App\Enums\InquiryType::Property => route('inquiries.property.store', $subject), App\Enums\InquiryType::Visa => route('inquiries.visa.store'), App\Enums\InquiryType::Baggage => route('inquiries.baggage.store'), default => route('inquiries.contact.store')};
     $input = 'min-h-12 w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-base outline-none focus:border-sky-600 focus:ring-2 focus:ring-sky-100';
 @endphp

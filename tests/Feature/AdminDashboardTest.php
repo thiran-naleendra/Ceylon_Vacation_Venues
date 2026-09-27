@@ -89,7 +89,7 @@ class AdminDashboardTest extends TestCase
         $response->assertOk()
             ->assertSee('Mobile admin navigation')
             ->assertSeeTextInOrder([
-                'Dashboard', 'Packages', 'Vehicles', 'Inquiries', 'Visa', 'Baggage',
+                'Dashboard', 'Packages', 'Vehicles', 'Villas & Houses', 'Inquiries', 'Visa', 'Baggage',
                 'Gallery', 'Blog', 'Pages', 'SEO', 'Redirects', 'Settings', 'Audit Logs',
             ]);
     }

@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\Amenity;
+use App\Models\Page;
 use App\Models\Property;
 use App\Models\PropertyImage;
 use App\Models\PropertyType;
@@ -28,6 +29,31 @@ class PublicPropertyTest extends TestCase
         Property::factory()->for($house, 'type')->published()->create(['name' => 'Galle House', 'location' => 'Galle', 'max_guests' => 4]);
         Property::factory()->for($villa, 'type')->create(['name' => 'Draft Mirissa Villa', 'location' => 'Mirissa', 'max_guests' => 10]);
         $this->get(route('properties.index', ['type' => 'villa', 'location' => 'Mirissa', 'guests' => 6]))->assertOk()->assertSeeText('Mirissa Family Villa')->assertDontSeeText('Galle House')->assertDontSeeText('Draft Mirissa Villa')->assertSee('name="type"', false)->assertSee('"@type":"BreadcrumbList"', false);
+    }
+
+    public function test_listing_uses_published_cms_content_and_seo(): void
+    {
+        $page = Page::query()->where('page_key', 'villas-houses')->firstOrFail();
+        $page->forceFill([
+            'title' => 'Handpicked Villas & Houses',
+            'summary' => 'Stay somewhere memorable in Sri Lanka.',
+            'body' => '<h2>Choose your island stay</h2><p>Managed accommodation content.</p>',
+            'status' => 'published',
+            'published_at' => now()->subMinute(),
+        ])->save();
+        $page->seoMetadata()->create([
+            'meta_title' => 'Sri Lanka Villas and Houses',
+            'meta_description' => 'Explore villas and houses in Sri Lanka.',
+            'robots_index' => true,
+            'robots_follow' => true,
+        ]);
+
+        $this->get(route('properties.index'))
+            ->assertOk()
+            ->assertSee('<title>Sri Lanka Villas and Houses</title>', false)
+            ->assertSeeText('Handpicked Villas & Houses')
+            ->assertSeeText('Managed accommodation content.')
+            ->assertSee('rel="canonical" href="'.route('properties.index').'"', false);
     }
 
     public function test_detail_has_gallery_amenities_inquiry_whatsapp_and_seo_schema(): void

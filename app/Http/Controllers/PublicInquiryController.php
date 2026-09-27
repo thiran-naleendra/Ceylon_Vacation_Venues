@@ -49,7 +49,7 @@ class PublicInquiryController extends Controller
 
     public function visaPage(Request $request): View
     {
-        return $this->servicePage($request, InquiryType::Visa, 'visa-extension', 'Visa Extension Assistance', 'Practical assistance with your Sri Lanka visa extension inquiry.');
+        return $this->servicePage($request, InquiryType::Visa, 'visa-extension', 'Visa Assistance', 'Coming to Sri Lanka, extending your stay or planning to do business here? We can help with your visa assistance needs.');
     }
 
     public function visa(Request $request): View
@@ -59,7 +59,7 @@ class PublicInquiryController extends Controller
 
     public function baggagePage(Request $request): View
     {
-        return $this->servicePage($request, InquiryType::Baggage, 'baggage-transport', 'Islandwide Baggage Transport', 'Send your baggage between destinations while you continue your Sri Lanka journey.');
+        return $this->servicePage($request, InquiryType::Baggage, 'baggage-transport', 'Airport Baggage Recovery', 'Missed your baggage at the airport? No worries—we will bring it back to you, so you do not have to waste time retrieving it.');
     }
 
     public function baggage(Request $request): View

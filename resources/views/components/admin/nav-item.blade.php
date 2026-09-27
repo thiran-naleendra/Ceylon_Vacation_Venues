@@ -47,6 +47,9 @@
             @case('redirects')
                 <svg viewBox="0 0 24 24" class="size-5 fill-none stroke-current" stroke-width="1.8"><path d="M5 7h11m0 0-3-3m3 3-3 3M19 17H8m0 0 3-3m-3 3 3 3"/></svg>
                 @break
+            @case('audit')
+                <svg viewBox="0 0 24 24" class="size-5 fill-none stroke-current" stroke-width="1.8"><path d="M7 3h10v3h3v15H4V6h3V3Zm0 7h10M8 14h8m-8 3h5M9 3v3h6V3"/></svg>
+                @break
             @case('settings')
                 <svg viewBox="0 0 24 24" class="size-5 fill-none stroke-current" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19 12a7 7 0 0 0-.1-1l2-1.5-2-3.4-2.4 1A7 7 0 0 0 15 6l-.3-2.6h-4L10.4 6a7 7 0 0 0-1.6.9l-2.4-1-2 3.4 2 1.6a7 7 0 0 0 0 2.2l-2 1.6 2 3.4 2.4-1a7 7 0 0 0 1.6.9l.3 2.6h4L15 18a7 7 0 0 0 1.6-.9l2.4 1 2-3.4-2-1.6c.1-.3.1-.7.1-1.1Z"/></svg>
                 @break

@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Enums\InquiryType;
 use App\Models\TourPackage;
+use App\Models\User;
 use App\Models\Vehicle;
 use App\Models\WebsiteSetting;
 use App\Notifications\NewInquiryNotification;
@@ -24,6 +25,8 @@ class PublicInquiryTest extends TestCase
 
     public function test_guest_can_submit_package_and_vehicle_inquiries_with_server_owned_relations(): void
     {
+        $owner = User::factory()->owner()->create();
+        $administrator = User::factory()->administrator()->create();
         $package = TourPackage::factory()->published()->create(['title' => 'Island Explorer']);
         $packageToken = $this->formToken(route('inquiries.package.create', $package));
         $this->travel(3)->seconds();
@@ -46,10 +49,14 @@ class PublicInquiryTest extends TestCase
         ])->assertRedirect()->assertSessionHas('inquiry_success');
 
         $this->assertDatabaseHas('rental_inquiry_details', ['vehicle_id' => $vehicle->id, 'vehicle_category_id' => $vehicle->vehicle_category_id, 'vehicle_title_snapshot' => 'Coastal Car']);
+        Notification::assertSentTo([$owner, $administrator], NewInquiryNotification::class);
+        Notification::assertCount(4);
     }
 
     public function test_guest_can_submit_visa_baggage_and_contact_inquiries(): void
     {
+        $owner = User::factory()->owner()->create();
+        $administrator = User::factory()->administrator()->create();
         $visaToken = $this->formToken(route('inquiries.visa.create'));
         $this->travel(3)->seconds();
         $this->post(route('inquiries.visa.store'), [
@@ -74,6 +81,8 @@ class PublicInquiryTest extends TestCase
         $this->assertDatabaseCount('inquiries', 3);
         $this->assertDatabaseCount('visa_inquiry_details', 1);
         $this->assertDatabaseCount('baggage_inquiry_details', 1);
+        Notification::assertSentTo([$owner, $administrator], NewInquiryNotification::class);
+        Notification::assertCount(6);
     }
 
     public function test_honeypot_fast_submissions_and_invalid_data_are_rejected(): void
@@ -85,9 +94,13 @@ class PublicInquiryTest extends TestCase
         $this->assertDatabaseEmpty('inquiries');
     }
 
-    public function test_notification_and_whatsapp_details_come_from_settings(): void
+    public function test_notifications_only_target_active_owners_and_administrators_and_whatsapp_comes_from_settings(): void
     {
-        (new WebsiteSetting)->forceFill(['group' => 'contact', 'key' => 'contact.notification_email', 'value' => 'office@example.com'])->save();
+        $owner = User::factory()->owner()->create();
+        $administrator = User::factory()->administrator()->create();
+        $inactiveOwner = User::factory()->owner()->inactive()->create();
+        $editor = User::factory()->editor()->create();
+        $inquiryAgent = User::factory()->inquiryAgent()->create();
         (new WebsiteSetting)->forceFill(['group' => 'contact', 'key' => 'contact.whatsapp_number', 'value' => '+94 77 123 4567'])->save();
         $response = $this->get(route('inquiries.contact.create'))->assertOk()->assertSee('https://wa.me/94771234567', false);
         $token = array_key_last($this->app['session']->get('inquiry_form_tokens'));
@@ -96,7 +109,9 @@ class PublicInquiryTest extends TestCase
             ...$this->contactData($token), 'subject' => 'Airport transfer', 'message' => 'Please send information about your transfer service.',
         ])->assertSessionHas('inquiry_success');
 
-        Notification::assertSentOnDemand(NewInquiryNotification::class, fn ($notification, $channels, $notifiable) => $notifiable->routes['mail'] === 'office@example.com');
+        Notification::assertSentTo([$owner, $administrator], NewInquiryNotification::class);
+        Notification::assertNotSentTo([$inactiveOwner, $editor, $inquiryAgent], NewInquiryNotification::class);
+        Notification::assertCount(2);
     }
 
     private function formToken(string $url): string

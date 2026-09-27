@@ -4,15 +4,18 @@ namespace App\Services;
 
 use App\Enums\InquiryStatus;
 use App\Enums\InquiryType;
+use App\Enums\UserRole;
 use App\Models\Inquiry;
 use App\Models\Property;
 use App\Models\TourPackage;
+use App\Models\User;
 use App\Models\Vehicle;
-use App\Models\WebsiteSetting;
 use App\Notifications\NewInquiryNotification;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Notification;
+use Throwable;
 
 class InquirySubmissionService
 {
@@ -44,11 +47,27 @@ class InquirySubmissionService
             return $inquiry;
         });
 
-        $notificationEmail = WebsiteSetting::query()->where('key', 'contact.notification_email')->first()?->value;
-        if (is_string($notificationEmail) && filter_var($notificationEmail, FILTER_VALIDATE_EMAIL)) {
-            Notification::route('mail', $notificationEmail)->notify(new NewInquiryNotification($inquiry));
-        }
+        $this->notifyAdministrators($inquiry);
 
         return $inquiry;
+    }
+
+    private function notifyAdministrators(Inquiry $inquiry): void
+    {
+        try {
+            $recipients = User::query()
+                ->active()
+                ->whereIn('role', [UserRole::Owner->value, UserRole::Administrator->value])
+                ->get();
+
+            if ($recipients->isNotEmpty()) {
+                Notification::send($recipients, new NewInquiryNotification($inquiry));
+            }
+        } catch (Throwable $exception) {
+            Log::warning('Unable to send new inquiry administrator notification.', [
+                'inquiry_reference' => $inquiry->reference,
+                'exception' => $exception::class,
+            ]);
+        }
     }
 }

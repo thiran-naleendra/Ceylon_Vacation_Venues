@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Models\Amenity;
+use App\Models\AuditLog;
 use App\Models\BlogCategory;
 use App\Models\BlogPost;
 use App\Models\GalleryAlbum;
@@ -20,6 +21,7 @@ use App\Models\Vehicle;
 use App\Models\VehicleCategory;
 use App\Observers\AdminContentAuditObserver;
 use App\Policies\AmenityPolicy;
+use App\Policies\AuditLogPolicy;
 use App\Policies\BlogCategoryPolicy;
 use App\Policies\BlogPostPolicy;
 use App\Policies\GalleryAlbumPolicy;
@@ -80,6 +82,7 @@ class AppServiceProvider extends ServiceProvider
         Gate::policy(Property::class, PropertyPolicy::class);
         Gate::policy(PropertyType::class, PropertyTypePolicy::class);
         Gate::policy(Amenity::class, AmenityPolicy::class);
+        Gate::policy(AuditLog::class, AuditLogPolicy::class);
 
         Gate::define('access-admin', fn (User $user): bool => $user->canAccessAdmin());
         Gate::define('manage-admin-users', fn (User $user): bool => $user->role->canManageAdminUsers());

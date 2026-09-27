@@ -35,6 +35,8 @@ class PublicWebsiteTest extends TestCase
         $this->setting('footer', 'footer.content', '<p>Managed footer information.</p>');
         SocialLink::factory()->create(['platform' => 'instagram', 'label' => 'Our Instagram', 'url' => 'https://instagram.com/managed']);
         Page::factory()->published()->create(['page_key' => 'about', 'title' => 'About our team', 'slug' => 'about-us']);
+        Page::factory()->published()->create(['page_key' => 'visa-extension', 'title' => 'Visa Assistance', 'slug' => 'visa-extension']);
+        Page::factory()->published()->create(['page_key' => 'baggage-transport', 'title' => 'Baggage Transport', 'slug' => 'baggage-transport']);
 
         $response = $this->get(route('blog.index'));
 
@@ -48,6 +50,8 @@ class PublicWebsiteTest extends TestCase
             ->assertSee('Managed footer information.')
             ->assertSee('Our Instagram')
             ->assertSee(route('about'), false)
+            ->assertSee('href="'.route('properties.index').'"', false)
+            ->assertSeeTextInOrder(['Home', 'Tour Packages', 'Villas & Houses', 'Vehicle Rental', 'Visa Assistance', 'Baggage Transport', 'Gallery', 'Blog', 'About Us', 'Contact', 'WhatsApp'])
             ->assertSee('aria-controls="mobile-navigation"', false);
     }
 

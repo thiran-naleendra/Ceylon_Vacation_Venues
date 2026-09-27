@@ -25,7 +25,19 @@ class PageController extends Controller
     public function index(): View
     {
         Gate::authorize('viewAny', Page::class);
-        $pages = Page::query()->with('sections')->orderBy('sort_order')->orderBy('id')->get();
+        $pageOrder = array_flip([
+            'home',
+            'about',
+            'villas-houses',
+            'visa-extension',
+            'baggage-transport',
+            'contact',
+            'privacy-policy',
+            'terms-and-conditions',
+        ]);
+        $pages = Page::query()->with('sections')->get()
+            ->sortBy(fn (Page $page): int => $pageOrder[$page->page_key] ?? PHP_INT_MAX)
+            ->values();
 
         return view('admin.pages.index', compact('pages'));
     }

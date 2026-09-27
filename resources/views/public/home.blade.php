@@ -123,24 +123,24 @@
             <article class="relative overflow-hidden rounded-[2rem] bg-[#dff4f2] p-7 sm:p-10">
                 <div class="relative z-10 max-w-lg">
                     <p class="text-xs font-bold uppercase tracking-[.22em] text-cyan-800">Travel assistance</p>
-                    <h2 class="mt-3 font-display text-3xl font-semibold text-[#082d4f] sm:text-4xl">Need help extending
-                        your visa?</h2>
-                    <p class="mt-4 leading-7 text-slate-600">Share your current visa details securely through the
-                        inquiry form so the team can understand your request.</p><a href="{{ $visaUrl }}"
+                    <h2 class="mt-3 font-display text-3xl font-semibold text-[#082d4f] sm:text-4xl">Visa assistance for
+                        Sri Lanka</h2>
+                    <p class="mt-4 leading-7 text-slate-600">Coming to Sri Lanka, extending your stay or planning to do
+                        business here? We can help with your visa assistance needs.</p><a href="{{ $visaUrl }}"
                         class="mt-7 inline-flex min-h-12 items-center gap-2 rounded-full bg-[#082d4f] px-6 font-bold text-white">Visa
-                        extension service <x-public.icon name="arrow" class="size-4" /></a>
+                        assistance <x-public.icon name="arrow" class="size-4" /></a>
                 </div>
                 <div class="absolute -bottom-20 -right-16 size-64 rounded-full bg-cyan-400/20"></div>
             </article>
             <article class="relative overflow-hidden rounded-[2rem] bg-[#fff2d7] p-7 sm:p-10">
                 <div class="relative z-10 max-w-lg">
                     <p class="text-xs font-bold uppercase tracking-[.22em] text-amber-800">Travel lighter</p>
-                    <h2 class="mt-3 font-display text-3xl font-semibold text-[#082d4f] sm:text-4xl">Islandwide baggage
-                        transport</h2>
-                    <p class="mt-4 leading-7 text-slate-600">Send your pickup, delivery and baggage details while you
-                        continue your journey around Sri Lanka.</p><a href="{{ $baggageUrl }}"
+                    <h2 class="mt-3 font-display text-3xl font-semibold text-[#082d4f] sm:text-4xl">Missed your baggage
+                        at the airport?</h2>
+                    <p class="mt-4 leading-7 text-slate-600">No worries—we will bring it back to you, so you do not
+                        have to waste time retrieving it.</p><a href="{{ $baggageUrl }}"
                         class="mt-7 inline-flex min-h-12 items-center gap-2 rounded-full bg-[#082d4f] px-6 font-bold text-white">Baggage
-                        transport <x-public.icon name="arrow" class="size-4" /></a>
+                        recovery service <x-public.icon name="arrow" class="size-4" /></a>
                 </div>
                 <div class="absolute -bottom-20 -right-16 size-64 rounded-full bg-amber-400/20"></div>
             </article>

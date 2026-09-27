@@ -50,7 +50,7 @@ class PublicServicePagesTest extends TestCase
 
         $this->get(route('services.baggage'))
             ->assertOk()
-            ->assertSeeText('Islandwide Baggage Transport')
+            ->assertSeeText('Airport Baggage Recovery')
             ->assertSee('action="'.route('inquiries.baggage.store').'"', false)
             ->assertDontSeeText('Private draft copy.');
     }

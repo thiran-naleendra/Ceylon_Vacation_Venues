@@ -23,13 +23,13 @@ class AdminPageTest extends TestCase
         Storage::fake('public');
     }
 
-    public function test_seeder_creates_the_seven_fixed_pages_without_duplicates(): void
+    public function test_seeder_creates_the_eight_fixed_pages_without_duplicates(): void
     {
         $this->seed(PageSeeder::class);
         $this->seed(PageSeeder::class);
 
-        $this->assertDatabaseCount('pages', 7);
-        $this->assertSame(['about', 'baggage-transport', 'contact', 'home', 'privacy-policy', 'terms-and-conditions', 'visa-extension'], Page::query()->orderBy('page_key')->pluck('page_key')->all());
+        $this->assertDatabaseCount('pages', 8);
+        $this->assertSame(['about', 'baggage-transport', 'contact', 'home', 'privacy-policy', 'terms-and-conditions', 'villas-houses', 'visa-extension'], Page::query()->orderBy('page_key')->pluck('page_key')->all());
     }
 
     public function test_editor_can_update_page_hero_seo_and_sanitized_content(): void
