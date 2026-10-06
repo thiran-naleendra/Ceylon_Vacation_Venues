@@ -37,9 +37,6 @@ window.packageExistingImages = (initialItems = []) => ({
     },
 });
 
-window.Alpine = Alpine;
-Alpine.start();
-
 window.socialLinksEditor = (initialItems = []) => ({
     platforms: ['facebook', 'instagram', 'youtube', 'linkedin', 'tiktok', 'x'],
     items: initialItems.map((item, index) => ({ ...item, key: `existing-${index}` })),
@@ -50,3 +47,6 @@ window.socialLinksEditor = (initialItems = []) => ({
         this.items.splice(index, 1);
     },
 });
+
+window.Alpine = Alpine;
+Alpine.start();

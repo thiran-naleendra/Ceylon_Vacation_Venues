@@ -31,6 +31,7 @@ class AdminPropertyTest extends TestCase
         $response->assertRedirect(route('admin.properties.show', $property));
         $this->assertSame('ocean-view-villa', $property->slug);
         $this->assertSame('USD', $property->currency);
+        $this->assertTrue($property->is_negotiable);
         $this->assertSame(PublicationStatus::Draft, $property->status);
         $this->assertSame('Ocean View Villa Sri Lanka', $property->seoMetadata->meta_title);
         $image = $property->images()->sole();
@@ -63,8 +64,21 @@ class AdminPropertyTest extends TestCase
         $this->assertDatabaseHas('amenities', ['slug' => 'breakfast']);
     }
 
+    public function test_editor_can_activate_and_deactivate_negotiable_status(): void
+    {
+        $property = Property::factory()->create();
+        $editor = User::factory()->editor()->create();
+
+        $this->actingAs($editor)->patch(route('admin.properties.status', $property), ['is_negotiable' => '1'])->assertRedirect();
+        $this->assertTrue($property->refresh()->is_negotiable);
+        $this->actingAs($editor)->get(route('admin.properties.index'))->assertOk()->assertSeeText('Negotiable');
+
+        $this->actingAs($editor)->patch(route('admin.properties.status', $property), ['is_negotiable' => '0'])->assertRedirect();
+        $this->assertFalse($property->refresh()->is_negotiable);
+    }
+
     private function data(PropertyType $type): array
     {
-        return ['property_type_id' => $type->id, 'name' => 'Ocean View Villa', 'slug' => '', 'short_description' => 'Private coastal villa.', 'description' => 'A spacious villa near the beach.', 'location' => 'Mirissa', 'address_description' => 'Five minutes from the beach.', 'price' => '180.50', 'currency' => 'usd', 'pricing_unit' => 'per_night', 'bedrooms' => 3, 'bathrooms' => '2.5', 'max_guests' => 6, 'beds_details' => 'Two king beds and two singles.', 'availability_information' => 'Contact us for dates.', 'check_in_time' => '14:00', 'check_out_time' => '11:00', 'sort_order' => 1, 'seo' => ['meta_title' => 'Ocean View Villa Sri Lanka', 'meta_description' => 'Stay at an ocean view villa in Mirissa.', 'canonical_url' => 'https://ceylonvacationvenues.com/villas-houses/ocean-view-villa', 'robots_index' => '1', 'robots_follow' => '1', 'og_title' => 'Ocean View Villa', 'og_description' => 'A private coastal stay.', 'og_image_alt' => 'Ocean villa exterior'], 'seo_use_featured_image' => '1'];
+        return ['property_type_id' => $type->id, 'name' => 'Ocean View Villa', 'slug' => '', 'short_description' => 'Private coastal villa.', 'description' => 'A spacious villa near the beach.', 'location' => 'Mirissa', 'address_description' => 'Five minutes from the beach.', 'price' => '180.50', 'currency' => 'usd', 'pricing_unit' => 'per_night', 'is_negotiable' => '1', 'bedrooms' => 3, 'bathrooms' => '2.5', 'max_guests' => 6, 'beds_details' => 'Two king beds and two singles.', 'availability_information' => 'Contact us for dates.', 'check_in_time' => '14:00', 'check_out_time' => '11:00', 'sort_order' => 1, 'seo' => ['meta_title' => 'Ocean View Villa Sri Lanka', 'meta_description' => 'Stay at an ocean view villa in Mirissa.', 'canonical_url' => 'https://ceylonvacationvenues.com/villas-houses/ocean-view-villa', 'robots_index' => '1', 'robots_follow' => '1', 'og_title' => 'Ocean View Villa', 'og_description' => 'A private coastal stay.', 'og_image_alt' => 'Ocean villa exterior'], 'seo_use_featured_image' => '1'];
     }
 }

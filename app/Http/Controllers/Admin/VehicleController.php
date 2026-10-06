@@ -164,7 +164,7 @@ class VehicleController extends Controller
 
     private function attributes(array $data): array
     {
-        $attributes = Arr::only($data, ['vehicle_category_id', 'title', 'slug', 'summary', 'description', 'rental_rate', 'currency', 'rate_unit', 'transmission', 'seats', 'luggage_capacity', 'has_air_conditioning', 'availability_status', 'sort_order']);
+        $attributes = Arr::only($data, ['vehicle_category_id', 'title', 'slug', 'summary', 'description', 'rental_rate', 'currency', 'rate_unit', 'transmission', 'seats', 'luggage_capacity', 'has_air_conditioning', 'additional_features', 'availability_status', 'sort_order']);
         $attributes['currency'] = strtoupper($attributes['currency']);
         if (blank($attributes['slug'] ?? null)) {
             unset($attributes['slug']);

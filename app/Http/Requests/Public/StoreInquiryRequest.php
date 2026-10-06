@@ -50,12 +50,12 @@ class StoreInquiryRequest extends FormRequest
                 'requested_extension_days' => ['required', 'integer', Rule::in([30, 60, 90])],
             ],
             InquiryType::Baggage => [
+                'phone' => ['required', 'string', 'max:40', 'regex:/^[0-9+() .-]+$/'],
                 'pickup_location' => ['required', 'string', 'max:255'],
                 'delivery_location' => ['required', 'string', 'max:255'],
-                'pickup_at' => ['required', 'date', 'after:now'],
                 'bag_count' => ['required', 'integer', 'min:1', 'max:100'],
-                'estimated_weight_kg' => ['nullable', 'decimal:0,2', 'min:0.01', 'max:999999.99'],
-                'special_instructions' => ['nullable', 'string', 'max:3000'],
+                'special_instructions' => ['nullable', 'string', 'max:255'],
+                'message' => ['required', 'string', 'min:10', 'max:5000'],
             ],
             InquiryType::General => [
                 'subject' => ['required', 'string', 'max:255'],

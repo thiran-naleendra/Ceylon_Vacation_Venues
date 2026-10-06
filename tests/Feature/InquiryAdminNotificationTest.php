@@ -31,7 +31,7 @@ class InquiryAdminNotificationTest extends TestCase
             InquiryType::Property->value => 'New Villa & House Inquiry - Ceylon Vacation Venues',
             InquiryType::Rental->value => 'New Vehicle Rental Inquiry - Ceylon Vacation Venues',
             InquiryType::Visa->value => 'New Visa Extension Request - Ceylon Vacation Venues',
-            InquiryType::Baggage->value => 'New Baggage Transport Request - Ceylon Vacation Venues',
+            InquiryType::Baggage->value => 'New Lost Baggage Recovery Request - Ceylon Vacation Venues',
             InquiryType::General->value => 'New Contact Message - Ceylon Vacation Venues',
         ];
 

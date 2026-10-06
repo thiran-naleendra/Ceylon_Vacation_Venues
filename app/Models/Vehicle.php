@@ -17,7 +17,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
-#[Fillable(['vehicle_category_id', 'title', 'slug', 'make', 'model', 'model_year', 'summary', 'description', 'seats', 'luggage_capacity', 'has_air_conditioning', 'transmission', 'fuel_type', 'rental_rate', 'currency', 'rate_unit', 'rental_terms', 'availability_status', 'sort_order'])]
+#[Fillable(['vehicle_category_id', 'title', 'slug', 'make', 'model', 'model_year', 'summary', 'description', 'seats', 'luggage_capacity', 'has_air_conditioning', 'additional_features', 'transmission', 'fuel_type', 'rental_rate', 'currency', 'rate_unit', 'rental_terms', 'availability_status', 'sort_order'])]
 class Vehicle extends Model
 {
     /** @use HasFactory<VehicleFactory> */

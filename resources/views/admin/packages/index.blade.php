@@ -13,6 +13,9 @@
     @if (session('success'))
         <div class="mb-5 rounded-xl bg-emerald-50 px-4 py-3 text-sm text-emerald-800 ring-1 ring-emerald-200" role="status">{{ session('success') }}</div>
     @endif
+    @error('package')
+        <div class="mb-5 rounded-xl bg-red-50 px-4 py-3 text-sm text-red-800 ring-1 ring-red-200" role="alert">{{ $message }}</div>
+    @enderror
 
     <form method="GET" class="mb-6 grid grid-cols-1 gap-3 rounded-2xl bg-white p-4 shadow-sm ring-1 ring-slate-200 sm:grid-cols-2 xl:grid-cols-[minmax(220px,1fr)_180px_180px_150px_auto]">
         <label class="min-w-0">
@@ -60,9 +63,16 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="mt-4 flex gap-2">
+                        <div class="mt-4 grid grid-cols-2 gap-2">
                             <a href="{{ route('admin.packages.show', $package) }}" class="inline-flex min-h-11 flex-1 items-center justify-center rounded-xl border border-slate-300 text-sm font-semibold text-slate-700">View</a>
                             <a href="{{ route('admin.packages.edit', $package) }}" class="inline-flex min-h-11 flex-1 items-center justify-center rounded-xl bg-[#082f57] text-sm font-semibold text-white">Edit</a>
+                            @can('delete', $package)
+                                <form method="POST" action="{{ route('admin.packages.destroy', $package) }}" class="col-span-2" onsubmit="return confirm('Delete this package? This action cannot be undone.')">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="inline-flex min-h-11 w-full items-center justify-center rounded-xl border border-red-200 bg-red-50 px-4 text-sm font-semibold text-red-700">Delete</button>
+                                </form>
+                            @endcan
                         </div>
                     </article>
                 @endforeach
@@ -78,7 +88,7 @@
                                 <td class="px-6 py-4 text-slate-600">{{ $package->starting_price !== null ? $package->currency.' '.number_format((float) $package->starting_price, 2) : 'On request' }}</td>
                                 <td class="px-6 py-4"><span class="capitalize text-slate-700">{{ $package->status->value }}</span>@if ($package->is_featured)<span class="ml-2 text-amber-600">★</span>@endif</td>
                                 <td class="px-6 py-4 text-slate-600">{{ $package->itineraries_count }} days · {{ $package->images_count }} images</td>
-                                <td class="px-6 py-4 text-right"><a href="{{ route('admin.packages.show', $package) }}" class="font-semibold text-sky-700">View</a><a href="{{ route('admin.packages.edit', $package) }}" class="ml-4 font-semibold text-slate-700">Edit</a></td>
+                                <td class="px-6 py-4"><div class="flex items-center justify-end gap-4"><a href="{{ route('admin.packages.show', $package) }}" class="font-semibold text-sky-700">View</a><a href="{{ route('admin.packages.edit', $package) }}" class="font-semibold text-slate-700">Edit</a>@can('delete', $package)<form method="POST" action="{{ route('admin.packages.destroy', $package) }}" onsubmit="return confirm('Delete this package? This action cannot be undone.')">@csrf @method('DELETE')<button type="submit" class="font-semibold text-red-700">Delete</button></form>@endcan</div></td>
                             </tr>
                         @endforeach
                     </tbody>

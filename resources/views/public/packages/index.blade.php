@@ -1,18 +1,17 @@
-<x-public.layout title="Sri Lanka Tour Packages"
-    meta-description="Explore published Sri Lanka tour packages by destination, duration, price and availability."
-    :canonical="route('packages.index')" :schema="$schema">
+<x-public.layout :seo="$seo">
     <section class="relative overflow-hidden bg-[#062d50] px-4 py-16 text-white sm:px-6 sm:py-24">
-        <div class="absolute -right-20 -top-20 size-80 rounded-full bg-cyan-400/10 blur-3xl"></div>
+        <x-public.hero-image :image="data_get($hero, 'image')" :alt="data_get($hero, 'image.alt', $page->title)"
+            class="absolute inset-0 h-full w-full object-cover opacity-25" />
+        <div class="absolute inset-0 bg-gradient-to-r from-[#062d50] via-[#062d50]/90 to-[#062d50]/55"></div>
         <div class="relative mx-auto max-w-7xl">
             <nav aria-label="Breadcrumb" class="text-sm text-cyan-200"><a href="{{ route('home') }}">Home</a> / <span
-                    aria-current="page">Tour packages</span></nav>
+                    aria-current="page">{{ $page->title }}</span></nav>
             <p class="mt-8 text-xs font-bold uppercase tracking-[.24em] text-cyan-300">Curated journeys</p>
-            <h1 class="mt-3 max-w-4xl font-display text-4xl font-semibold tracking-tight sm:text-6xl">Sri Lanka tour
-                packages</h1>
-            <p class="mt-5 max-w-2xl text-lg leading-8 text-sky-100/75">Find a published itinerary that matches your
-                destination, schedule and travel plans.</p>
+            <h1 class="mt-3 max-w-4xl font-display text-4xl font-semibold tracking-tight sm:text-6xl">{{ data_get($hero, 'title') ?: $page->title }}</h1>
+            @if(data_get($hero, 'text') ?: $page->summary)<p class="mt-5 max-w-2xl text-lg leading-8 text-sky-100/75">{{ data_get($hero, 'text') ?: $page->summary }}</p>@endif
         </div>
     </section>
+    @if($page->body)<section class="px-4 pt-10 sm:px-6 sm:pt-16 lg:px-8"><div class="rich-content mx-auto max-w-4xl">{!! $page->body !!}</div></section>@endif
     <section class="px-4 py-10 sm:px-6 sm:py-16 lg:px-8">
         <div class="mx-auto max-w-7xl">
             <form method="GET" action="{{ route('packages.index') }}"

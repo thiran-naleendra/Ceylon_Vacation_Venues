@@ -24,11 +24,11 @@
     $termsUrl = $sitePages->get('terms-and-conditions')['url'] ?? null;
     $navigation = array_filter([
         ['label' => 'Home', 'url' => route('home')],
-        ['label' => 'Tour Packages', 'url' => route('packages.index')],
+        ['label' => 'Packages & Experiences', 'url' => route('packages.index')],
         ['label' => 'Villas & Houses', 'url' => route('properties.index')],
         ['label' => 'Vehicle Rental', 'url' => route('vehicles.index')],
         ['label' => 'Visa Assistance', 'url' => $visaUrl],
-        ['label' => 'Baggage Transport', 'url' => $baggageUrl],
+        ['label' => 'Baggage Recovery', 'url' => $baggageUrl],
         ['label' => 'Gallery', 'url' => route('gallery.index')],
         ['label' => 'Blog', 'url' => route('blog.index')],
         ['label' => 'About Us', 'url' => $aboutUrl],
@@ -74,7 +74,7 @@
             <div
                 class="mx-auto flex min-h-9 max-w-[90rem] items-center justify-between gap-4 px-4 text-xs text-sky-100 sm:px-6 lg:px-8">
                 <p class="truncate">Sri Lanka travel, thoughtfully arranged</p>
-                <div class="flex shrink-0 items-center gap-4">@if($phone)<a
+                <div class="flex shrink-0 items-center gap-3">@if($siteSocialLinks->isNotEmpty())<div class="hidden items-center gap-1 lg:flex" aria-label="Social media">@foreach($siteSocialLinks as $social)<a href="{{ $social->url }}" target="_blank" rel="noopener noreferrer" data-social-platform="{{ $social->platform }}" aria-label="{{ $social->label ?: ucfirst($social->platform) }}" class="inline-flex size-7 items-center justify-center rounded-full text-sky-100/80 transition hover:bg-white/10 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300"><x-public.icon :name="$social->platform" class="size-4" /></a>@endforeach</div>@endif @if($phone)<a
                     href="tel:{{ preg_replace('/[^+\d]/', '', $phone) }}"
                     class="hidden items-center gap-1.5 sm:flex"><x-public.icon name="phone"
                 class="size-3.5" />{{ $phone }}</a>@endif @if($email)<a href="mailto:{{ $email }}"
@@ -107,7 +107,7 @@
             <nav aria-label="Mobile navigation" class="mx-auto grid max-w-3xl gap-1 py-4">
                 @foreach($navigation as $item)<a href="{{ $item['url'] }}"
                     class="flex min-h-12 items-center justify-between rounded-xl px-4 font-semibold text-sky-50 hover:bg-white/10">{{ $item['label'] }}<x-public.icon
-                name="arrow" class="size-4 text-cyan-300" /></a>@endforeach @if($whatsAppDigits)<a
+                name="arrow" class="size-4 text-cyan-300" /></a>@endforeach @if($siteSocialLinks->isNotEmpty())<div class="mt-3 flex flex-wrap items-center justify-center gap-2 border-t border-white/10 pt-4" aria-label="Social media">@foreach($siteSocialLinks as $social)<a href="{{ $social->url }}" target="_blank" rel="noopener noreferrer" data-social-platform="{{ $social->platform }}" aria-label="{{ $social->label ?: ucfirst($social->platform) }}" class="inline-flex size-11 items-center justify-center rounded-full border border-white/15 text-sky-50"><x-public.icon :name="$social->platform" class="size-5" /></a>@endforeach</div>@endif @if($whatsAppDigits)<a
                             href="https://wa.me/{{ $whatsAppDigits }}" target="_blank" rel="noopener noreferrer"
                             class="mt-3 flex min-h-12 items-center justify-center gap-2 rounded-xl bg-[#31b879] px-4 font-bold"><x-public.icon
                         name="whatsapp" /> Chat on WhatsApp</a>@endif</nav>
@@ -126,10 +126,11 @@
                         {!! $siteSettings->get('footer.content') !!}</div>@else<p
                         class="mt-5 max-w-sm text-sm leading-6 text-sky-100/70">Personal travel services for discovering Sri
                     Lanka with confidence and ease.</p>@endif @if($siteSocialLinks->isNotEmpty())
-                        <div class="mt-6 flex flex-wrap gap-2">@foreach($siteSocialLinks as $social)<a href="{{ $social->url }}"
+                        <div class="mt-6 flex flex-wrap gap-2" aria-label="Social media">@foreach($siteSocialLinks as $social)<a href="{{ $social->url }}"
                             target="_blank" rel="noopener noreferrer"
+                            data-social-platform="{{ $social->platform }}"
                             aria-label="{{ $social->label ?: ucfirst($social->platform) }}"
-                        class="inline-flex min-h-11 items-center rounded-full border border-white/15 px-4 text-xs font-bold uppercase tracking-wider hover:bg-white/10">{{ $social->label ?: $social->platform }}</a>@endforeach
+                        class="inline-flex size-11 items-center justify-center rounded-full border border-white/15 text-sky-50 transition hover:bg-white/10" title="{{ $social->label ?: ucfirst($social->platform) }}"><x-public.icon :name="$social->platform" class="size-5" /></a>@endforeach
                     </div>@endif
             </div>
             <div>
@@ -138,7 +139,7 @@
                     <li><a href="{{ route('packages.index') }}">Tour packages</a></li>
                     <li><a href="{{ route('vehicles.index') }}">Vehicle rental</a></li><li><a href="{{ route('properties.index') }}">Villas & Houses</a></li>@if($visaUrl)
                     <li><a href="{{ $visaUrl }}">Visa assistance</a></li>@endif @if($baggageUrl)
-                    <li><a href="{{ $baggageUrl }}">Baggage transport</a></li>@endif<li><a
+                    <li><a href="{{ $baggageUrl }}">Baggage recovery</a></li>@endif<li><a
                             href="{{ route('gallery.index') }}">Gallery</a></li>
                 </ul>
             </div>

@@ -127,6 +127,8 @@ class PropertyController extends Controller
         }if (array_key_exists('is_featured', $data)) {
             Gate::authorize('feature', $property);
             $property->is_featured = $data['is_featured'];
+        }if (array_key_exists('is_negotiable', $data)) {
+            $property->is_negotiable = $data['is_negotiable'];
         }$property->save();
         $this->audit('property.status_updated', $property);
 
@@ -155,7 +157,7 @@ class PropertyController extends Controller
 
     private function attributes(array $data): array
     {
-        $a = Arr::only($data, ['property_type_id', 'name', 'slug', 'short_description', 'description', 'location', 'address_description', 'price', 'currency', 'pricing_unit', 'bedrooms', 'bathrooms', 'max_guests', 'beds_details', 'availability_information', 'check_in_time', 'check_out_time', 'sort_order']);
+        $a = Arr::only($data, ['property_type_id', 'name', 'slug', 'short_description', 'description', 'location', 'address_description', 'price', 'currency', 'pricing_unit', 'is_negotiable', 'bedrooms', 'bathrooms', 'max_guests', 'beds_details', 'availability_information', 'check_in_time', 'check_out_time', 'sort_order']);
         $a['currency'] = strtoupper($a['currency']);
         if (blank($a['slug'] ?? null)) {
             unset($a['slug']);

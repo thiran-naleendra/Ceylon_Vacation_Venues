@@ -27,10 +27,14 @@ class PageController extends Controller
         Gate::authorize('viewAny', Page::class);
         $pageOrder = array_flip([
             'home',
-            'about',
+            'tour-packages',
             'villas-houses',
+            'vehicle-rental',
             'visa-extension',
             'baggage-transport',
+            'gallery',
+            'blog',
+            'about',
             'contact',
             'privacy-policy',
             'terms-and-conditions',

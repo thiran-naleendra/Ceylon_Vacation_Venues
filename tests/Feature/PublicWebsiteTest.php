@@ -7,6 +7,7 @@ use App\Models\BlogPost;
 use App\Models\GalleryAlbum;
 use App\Models\GalleryImage;
 use App\Models\Page;
+use App\Models\Property;
 use App\Models\SocialLink;
 use App\Models\TourPackage;
 use App\Models\Vehicle;
@@ -49,9 +50,10 @@ class PublicWebsiteTest extends TestCase
             ->assertSee('/storage/branding/favicon.webp', false)
             ->assertSee('Managed footer information.')
             ->assertSee('Our Instagram')
+            ->assertSee('data-social-platform="instagram"', false)
             ->assertSee(route('about'), false)
             ->assertSee('href="'.route('properties.index').'"', false)
-            ->assertSeeTextInOrder(['Home', 'Tour Packages', 'Villas & Houses', 'Vehicle Rental', 'Visa Assistance', 'Baggage Transport', 'Gallery', 'Blog', 'About Us', 'Contact', 'WhatsApp'])
+            ->assertSeeTextInOrder(['Home', 'Packages & Experiences', 'Villas & Houses', 'Vehicle Rental', 'Visa Assistance', 'Baggage Recovery', 'Gallery', 'Blog', 'About Us', 'Contact', 'WhatsApp'])
             ->assertSee('aria-controls="mobile-navigation"', false);
     }
 
@@ -64,6 +66,8 @@ class PublicWebsiteTest extends TestCase
         $draftPackage->forceFill(['is_featured' => true])->save();
         $featuredVehicle = Vehicle::factory()->published()->create(['title' => 'Published Featured Car']);
         $featuredVehicle->forceFill(['is_featured' => true])->save();
+        $publishedProperty = Property::factory()->published()->create(['name' => 'Published Beach Villa']);
+        $draftProperty = Property::factory()->create(['name' => 'Draft Beach Villa']);
         BlogPost::factory()->published()->create(['title' => 'Published Island Guide']);
         BlogPost::factory()->create(['title' => 'Draft Island Guide']);
         $album = GalleryAlbum::factory()->published()->create();
@@ -81,7 +85,12 @@ class PublicWebsiteTest extends TestCase
             ->assertSeeText('Published Featured Tour')
             ->assertDontSeeText('Draft Featured Tour')
             ->assertSeeText('Published Featured Car')
+            ->assertSeeText('Published Beach Villa')
+            ->assertDontSeeText('Draft Beach Villa')
             ->assertSeeText('Published Island Guide')
+            ->assertSeeText('Villas & houses for your Sri Lanka stay')
+            ->assertSeeText('From an idea to a clear travel plan')
+            ->assertSee('href="'.route('properties.index').'"', false)
             ->assertDontSeeText('Draft Island Guide')
             ->assertSee('alt="Published Beach Photograph"', false)
             ->assertDontSee('testimonial', false)
@@ -113,6 +122,39 @@ class PublicWebsiteTest extends TestCase
             ->assertDontSeeText('Image in draft album')
             ->assertSee('<h1', false)
             ->assertSee('loading="lazy"', false);
+    }
+
+    public function test_managed_listing_pages_render_their_cms_content(): void
+    {
+        $pages = [
+            'tour-packages' => 'packages.index',
+            'vehicle-rental' => 'vehicles.index',
+            'gallery' => 'gallery.index',
+            'blog' => 'blog.index',
+        ];
+
+        foreach ($pages as $pageKey => $routeName) {
+            $page = Page::query()->where('page_key', $pageKey)->firstOrFail();
+            $page->forceFill([
+                'title' => 'Managed '.str($pageKey)->headline(),
+                'summary' => 'Managed summary for '.$pageKey.'.',
+                'body' => '<h2>Managed content for '.$pageKey.'</h2>',
+            ])->save();
+            $section = $page->sections()->make();
+            $section->forceFill([
+                'section_key' => 'hero',
+                'section_type' => 'hero',
+                'content' => ['title' => 'Managed hero for '.$pageKey, 'text' => 'Managed hero text.'],
+                'is_enabled' => true,
+                'sort_order' => 0,
+            ])->save();
+
+            $this->get(route($routeName))
+                ->assertOk()
+                ->assertSeeText('Managed hero for '.$pageKey)
+                ->assertSeeText('Managed hero text.')
+                ->assertSee('<h2>Managed content for '.$pageKey.'</h2>', false);
+        }
     }
 
     private function setting(string $group, string $key, mixed $value): void

@@ -16,5 +16,12 @@
 @case('shield')<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/><path d="m9 12 2 2 4-4"/>@break
 @case('map')<path d="m3 6 6-3 6 3 6-3v15l-6 3-6-3-6 3V6Z"/><path d="M9 3v15M15 6v15"/>@break
 @case('sparkle')<path d="m12 3 1.5 4.5L18 9l-4.5 1.5L12 15l-1.5-4.5L6 9l4.5-1.5L12 3ZM19 16l.7 2.3L22 19l-2.3.7L19 22l-.7-2.3L16 19l2.3-.7L19 16Z"/>@break
+@case('home')<path d="m3 11 9-7 9 7M5 10v10h14V10M9 20v-6h6v6"/>@break
+@case('facebook')<path d="M14 8h3V4h-3c-3.3 0-5 2-5 5v3H6v4h3v6h4v-6h3.5l.5-4h-4V9c0-.7.3-1 1-1Z"/>@break
+@case('instagram')<rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><path d="M17.5 6.5h.01"/>@break
+@case('youtube')<path d="M21 8.2a2.8 2.8 0 0 0-2-2C17.2 5.7 12 5.7 12 5.7s-5.2 0-7 .5a2.8 2.8 0 0 0-2 2A29 29 0 0 0 2.5 12 29 29 0 0 0 3 15.8a2.8 2.8 0 0 0 2 2c1.8.5 7 .5 7 .5s5.2 0 7-.5a2.8 2.8 0 0 0 2-2 29 29 0 0 0 .5-3.8 29 29 0 0 0-.5-3.8Z"/><path d="m10 15 5-3-5-3v6Z"/>@break
+@case('linkedin')<rect x="4" y="9" width="4" height="11"/><path d="M6 4.5v.01M12 20v-6.5a4 4 0 0 1 8 0V20M12 9v11"/>@break
+@case('tiktok')<path d="M15 4v11.5a4.5 4.5 0 1 1-4-4.47M15 4c.6 3 2.4 4.8 5 5"/>@break
+@case('x')<path d="M4 4l16 16M20 4 4 20"/>@break
 @default<circle cx="12" cy="12" r="9"/>@endswitch
 </svg>

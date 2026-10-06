@@ -68,8 +68,9 @@ class PublicInquiryTest extends TestCase
         $baggageToken = $this->formToken(route('inquiries.baggage.create'));
         $this->travel(3)->seconds();
         $this->post(route('inquiries.baggage.store'), [
-            ...$this->contactData($baggageToken), 'pickup_location' => 'Kandy', 'delivery_location' => 'Ella',
-            'pickup_at' => now()->addWeek()->format('Y-m-d H:i:s'), 'bag_count' => 3, 'estimated_weight_kg' => '42.50',
+            ...$this->contactData($baggageToken), 'pickup_location' => 'Bandaranaike International Airport',
+            'delivery_location' => 'UL 504', 'bag_count' => 3, 'special_instructions' => 'CMB-12345',
+            'message' => 'Three black suitcases with red luggage straps are missing.',
         ])->assertSessionHas('inquiry_success');
 
         $contactToken = $this->formToken(route('inquiries.contact.create'));
@@ -81,6 +82,12 @@ class PublicInquiryTest extends TestCase
         $this->assertDatabaseCount('inquiries', 3);
         $this->assertDatabaseCount('visa_inquiry_details', 1);
         $this->assertDatabaseCount('baggage_inquiry_details', 1);
+        $this->assertDatabaseHas('baggage_inquiry_details', [
+            'pickup_location' => 'Bandaranaike International Airport',
+            'delivery_location' => 'UL 504',
+            'bag_count' => 3,
+            'special_instructions' => 'CMB-12345',
+        ]);
         Notification::assertSentTo([$owner, $administrator], NewInquiryNotification::class);
         Notification::assertCount(6);
     }

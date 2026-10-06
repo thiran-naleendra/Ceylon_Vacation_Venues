@@ -17,7 +17,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
-#[Fillable(['property_type_id', 'name', 'slug', 'short_description', 'description', 'location', 'address_description', 'price', 'currency', 'pricing_unit', 'bedrooms', 'bathrooms', 'max_guests', 'beds_details', 'availability_information', 'check_in_time', 'check_out_time', 'sort_order'])]
+#[Fillable(['property_type_id', 'name', 'slug', 'short_description', 'description', 'location', 'address_description', 'price', 'currency', 'pricing_unit', 'is_negotiable', 'bedrooms', 'bathrooms', 'max_guests', 'beds_details', 'availability_information', 'check_in_time', 'check_out_time', 'sort_order'])]
 class Property extends Model
 {
     /** @use HasFactory<PropertyFactory> */
@@ -25,7 +25,7 @@ class Property extends Model
 
     protected function casts(): array
     {
-        return ['price' => 'decimal:2', 'bathrooms' => 'decimal:1', 'bedrooms' => 'integer', 'max_guests' => 'integer', 'is_featured' => 'boolean', 'check_in_time' => 'datetime:H:i', 'check_out_time' => 'datetime:H:i'];
+        return ['price' => 'decimal:2', 'bathrooms' => 'decimal:1', 'bedrooms' => 'integer', 'max_guests' => 'integer', 'is_featured' => 'boolean', 'is_negotiable' => 'boolean', 'check_in_time' => 'datetime:H:i', 'check_out_time' => 'datetime:H:i'];
     }
 
     public function type(): BelongsTo

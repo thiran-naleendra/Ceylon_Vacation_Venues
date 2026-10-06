@@ -13,6 +13,7 @@ use App\Http\Controllers\Admin\PageController;
 use App\Http\Controllers\Admin\PropertyController;
 use App\Http\Controllers\Admin\PropertyTypeController;
 use App\Http\Controllers\Admin\RedirectController;
+use App\Http\Controllers\Admin\SeoController;
 use App\Http\Controllers\Admin\SettingsController;
 use App\Http\Controllers\Admin\TourPackageController;
 use App\Http\Controllers\Admin\UserController;
@@ -60,11 +61,9 @@ Route::prefix('admin')->name('admin.')->group(function (): void {
         Route::get('audit-logs', [AuditLogController::class, 'index'])->name('audit-logs.index');
         Route::get('audit-logs/{auditLog}', [AuditLogController::class, 'show'])->name('audit-logs.show');
 
-        foreach ([
-            'seo' => 'SEO',
-        ] as $path => $title) {
-            Route::view($path, 'admin.placeholder', compact('title'))->name($path.'.index');
-        }
+        Route::get('seo', [SeoController::class, 'index'])->name('seo.index');
+        Route::get('seo/{type}/{record}/edit', [SeoController::class, 'edit'])->name('seo.edit');
+        Route::put('seo/{type}/{record}', [SeoController::class, 'update'])->name('seo.update');
 
         Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
     });

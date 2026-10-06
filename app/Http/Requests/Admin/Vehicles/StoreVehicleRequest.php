@@ -27,6 +27,7 @@ class StoreVehicleRequest extends FormRequest
             'rate_unit' => ['required', Rule::in(['hour', 'day', 'week', 'month'])], 'transmission' => ['nullable', Rule::in(['automatic', 'manual', 'semi_automatic'])],
             'seats' => ['nullable', 'integer', 'min:1', 'max:100'], 'luggage_capacity' => ['nullable', 'integer', 'min:0', 'max:100'],
             'has_air_conditioning' => ['required', 'boolean'], 'availability_status' => ['required', Rule::enum(VehicleAvailability::class)],
+            'additional_features' => ['nullable', 'string', 'max:10000'],
             'sort_order' => ['required', 'integer', 'min:0', 'max:4294967295'],
             'featured_image' => ['nullable', $this->imageRule()], 'featured_image_alt' => ['nullable', 'string', 'max:255', 'required_with:featured_image'],
             'gallery_images' => ['nullable', 'array', 'max:12'], 'gallery_images.*' => [$this->imageRule()],

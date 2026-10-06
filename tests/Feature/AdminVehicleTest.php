@@ -39,6 +39,7 @@ class AdminVehicleTest extends TestCase
         $this->assertSame('premium-sedan', $vehicle->slug);
         $this->assertSame(VehicleAvailability::Available, $vehicle->availability_status);
         $this->assertTrue($vehicle->has_air_conditioning);
+        $this->assertSame("Bluetooth audio\nChild seat available", $vehicle->additional_features);
         $this->assertSame(PublicationStatus::Draft, $vehicle->status);
         $image = $vehicle->images()->sole();
         $this->assertSame(ImageProcessingStatus::Ready, $image->processing_status);
@@ -108,6 +109,23 @@ class AdminVehicleTest extends TestCase
         $this->actingAs(User::factory()->administrator()->create())->delete(route('admin.vehicle-categories.destroy', $vehicle->category))->assertSessionHasErrors('category');
     }
 
+    public function test_delete_action_is_only_shown_to_users_authorized_to_delete_vehicles(): void
+    {
+        $vehicle = Vehicle::factory()->create();
+
+        $this->actingAs(User::factory()->administrator()->create())
+            ->get(route('admin.vehicles.index'))
+            ->assertOk()
+            ->assertSee('action="'.route('admin.vehicles.destroy', $vehicle).'"', false)
+            ->assertSeeText('Delete');
+
+        $this->actingAs(User::factory()->editor()->create())
+            ->get(route('admin.vehicles.index'))
+            ->assertOk()
+            ->assertDontSee('action="'.route('admin.vehicles.destroy', $vehicle).'"', false)
+            ->assertDontSeeText('Delete');
+    }
+
     public function test_administrator_can_manage_vehicle_categories(): void
     {
         $admin = User::factory()->administrator()->create();
@@ -130,6 +148,7 @@ class AdminVehicleTest extends TestCase
             'summary' => 'Comfortable private transport.', 'description' => 'A modern vehicle for island travel.',
             'rental_rate' => '75.50', 'currency' => 'usd', 'rate_unit' => 'day', 'transmission' => 'automatic',
             'seats' => 4, 'luggage_capacity' => 2, 'has_air_conditioning' => '1',
+            'additional_features' => "Bluetooth audio\nChild seat available",
             'availability_status' => 'available', 'sort_order' => 1,
             'seo' => ['meta_title' => 'Premium Sedan Rental', 'meta_description' => 'Rent a sedan in Sri Lanka.', 'canonical_url' => 'https://ceylonvacationvenues.com/vehicles/premium-sedan', 'robots_index' => '1', 'robots_follow' => '1', 'og_title' => 'Premium Sedan', 'og_description' => 'Comfortable transport.', 'og_image_alt' => 'Premium sedan'],
             'seo_use_featured_image' => '1',

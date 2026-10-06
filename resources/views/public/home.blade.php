@@ -36,11 +36,11 @@
     </section>
 
     @if($featuredPackages->isNotEmpty())
-        <section class="px-4 py-16 sm:px-6 sm:py-24 lg:px-8">
+        <section class="bg-gradient-to-b from-white to-[#eef7fb] px-4 py-16 sm:px-6 sm:py-24 lg:px-8">
             <div class="mx-auto max-w-7xl">
                 <div class="flex flex-col gap-6 md:flex-row md:items-end md:justify-between"><x-public.section-heading
-                        eyebrow="Curated journeys" title="Featured Sri Lanka tours"
-                        description="Explore published itineraries designed for memorable days across the island." /><a
+                        eyebrow="Curated journeys" title="Explore Sri Lanka tours"
+                        description="Compare published itineraries, destinations, duration and pricing before choosing your journey." /><a
                         href="{{ route('packages.index') }}"
                         class="inline-flex min-h-11 items-center gap-2 self-start font-bold text-cyan-700">View every
                         package <x-public.icon name="arrow" class="size-4" /></a></div>
@@ -49,8 +49,29 @@
             </div>
     </section>@endif
 
+    <section class="overflow-hidden bg-gradient-to-br from-[#e5f5f1] via-[#edf8f5] to-[#dff1f3] px-4 py-16 sm:px-6 sm:py-24 lg:px-8">
+        <div class="mx-auto max-w-7xl">
+            <div class="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+                <x-public.section-heading eyebrow="Stay your way" title="Villas & houses for your Sri Lanka stay"
+                    description="Explore published properties with location, capacity, amenities and pricing details, then inquire directly about availability." />
+                <a href="{{ route('properties.index') }}" class="inline-flex min-h-11 items-center gap-2 self-start font-bold text-cyan-700">View all villas & houses <x-public.icon name="arrow" class="size-4" /></a>
+            </div>
+            @if($featuredProperties->isNotEmpty())
+                <div class="mt-10 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+                    @foreach($featuredProperties as $property)<x-public.property-card :property="$property" heading-level="h3" />@endforeach
+                </div>
+            @else
+                <div class="mt-10 grid gap-6 overflow-hidden rounded-[2rem] bg-[#082d4f] p-7 text-white sm:grid-cols-[auto_1fr_auto] sm:items-center sm:p-9">
+                    <span class="grid size-14 place-items-center rounded-2xl bg-white/10"><x-public.icon name="home" class="size-7" /></span>
+                    <div><h3 class="font-display text-2xl font-semibold">Find a comfortable base for your journey</h3><p class="mt-2 text-sm leading-6 text-sky-100/75">Browse the accommodation page as new villas and houses become available.</p></div>
+                    <a href="{{ route('properties.index') }}" class="inline-flex min-h-12 items-center justify-center rounded-full bg-white px-5 font-bold text-[#082d4f]">Explore stays</a>
+                </div>
+            @endif
+        </div>
+    </section>
+
     @if($destinations->isNotEmpty() || filled($page->body))
-        <section class="overflow-hidden bg-[#eaf6f4] px-4 py-16 sm:px-6 sm:py-24 lg:px-8">
+        <section class="overflow-hidden bg-[#dff1ed] px-4 py-16 sm:px-6 sm:py-24 lg:px-8">
             <div class="mx-auto grid max-w-7xl gap-12 lg:grid-cols-[.9fr_1.1fr] lg:items-center">
                 <div><x-public.section-heading eyebrow="One island, many stories" title="Find your corner of Sri Lanka"
                         description="Coastlines, culture, wildlife and hill-country scenery can all become part of one thoughtfully planned journey." />@if($destinations->isNotEmpty())
@@ -68,7 +89,7 @@
             </div>
     </section>@endif
 
-    <section class="px-4 py-16 sm:px-6 sm:py-24 lg:px-8">
+    <section class="bg-[#f4f8fc] px-4 py-16 sm:px-6 sm:py-24 lg:px-8">
         <div class="mx-auto max-w-7xl"><x-public.section-heading eyebrow="Travel with confidence"
                 title="Practical support for your island journey"
                 description="Bring the essential parts of your Sri Lanka trip together in one place." align="center" />
@@ -98,6 +119,34 @@
         </div>
     </section>
 
+    <section class="border-y border-amber-100 bg-gradient-to-b from-[#fffaf0] to-[#fff6e6] px-4 py-16 sm:px-6 sm:py-24 lg:px-8">
+        <div class="mx-auto max-w-7xl">
+            <x-public.section-heading eyebrow="Simple and personal" title="From an idea to a clear travel plan"
+                description="Browse the published options, tell us what you need, and continue the conversation directly with our team." align="center" />
+            <ol class="mt-12 grid grid-cols-1 gap-5 md:grid-cols-3">
+                <li class="relative rounded-[1.75rem] bg-white p-7 shadow-sm ring-1 ring-amber-100">
+                    <span class="font-display text-5xl font-semibold text-cyan-700/25">01</span>
+                    <h3 class="mt-5 font-display text-2xl font-semibold text-[#082d4f]">Explore your options</h3>
+                    <p class="mt-3 text-sm leading-6 text-slate-600">Compare tours, accommodation and vehicles using the details published on each page.</p>
+                </li>
+                <li class="relative rounded-[1.75rem] bg-white p-7 shadow-sm ring-1 ring-amber-100">
+                    <span class="font-display text-5xl font-semibold text-cyan-700/25">02</span>
+                    <h3 class="mt-5 font-display text-2xl font-semibold text-[#082d4f]">Send your requirements</h3>
+                    <p class="mt-3 text-sm leading-6 text-slate-600">Share your dates, group size and questions through the relevant inquiry form.</p>
+                </li>
+                <li class="relative rounded-[1.75rem] bg-white p-7 shadow-sm ring-1 ring-amber-100">
+                    <span class="font-display text-5xl font-semibold text-cyan-700/25">03</span>
+                    <h3 class="mt-5 font-display text-2xl font-semibold text-[#082d4f]">Confirm the details</h3>
+                    <p class="mt-3 text-sm leading-6 text-slate-600">Our team can respond with availability and the practical information needed for your plans.</p>
+                </li>
+            </ol>
+            <div class="mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row">
+                <a href="{{ route('inquiries.contact.create') }}" class="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-full bg-[#082d4f] px-6 font-bold text-white sm:w-auto">Tell us about your trip <x-public.icon name="arrow" class="size-4" /></a>
+                <a href="{{ route('services.visa') }}" class="inline-flex min-h-12 w-full items-center justify-center rounded-full border border-slate-300 bg-white px-6 font-bold text-[#082d4f] sm:w-auto">View travel assistance</a>
+            </div>
+        </div>
+    </section>
+
     <section class="bg-[#062d50] px-4 py-16 text-white sm:px-6 sm:py-24 lg:px-8">
         <div class="mx-auto grid max-w-7xl gap-12 lg:grid-cols-[.85fr_1.15fr] lg:items-center">
             <div>
@@ -118,7 +167,7 @@
         </div>
     </section>
 
-    <section class="px-4 py-16 sm:px-6 sm:py-24 lg:px-8">
+    <section class="bg-gradient-to-br from-[#f8fbfc] via-white to-[#e9f6f2] px-4 py-16 sm:px-6 sm:py-24 lg:px-8">
         <div class="mx-auto grid max-w-7xl gap-6 lg:grid-cols-2">
             <article class="relative overflow-hidden rounded-[2rem] bg-[#dff4f2] p-7 sm:p-10">
                 <div class="relative z-10 max-w-lg">
@@ -148,7 +197,7 @@
     </section>
 
     @if($galleryImages->isNotEmpty())
-        <section class="bg-white px-4 py-16 sm:px-6 sm:py-24 lg:px-8">
+        <section class="bg-[#fffaf1] px-4 py-16 sm:px-6 sm:py-24 lg:px-8">
             <div class="mx-auto max-w-7xl">
                 <div class="flex flex-col gap-6 md:flex-row md:items-end md:justify-between"><x-public.section-heading
                         eyebrow="Island moments" title="A glimpse of Sri Lanka"
@@ -172,7 +221,7 @@
     </section>@endif
 
     @if($latestPosts->isNotEmpty())
-        <section class="px-4 py-16 sm:px-6 sm:py-24 lg:px-8">
+        <section class="bg-[#eef6fa] px-4 py-16 sm:px-6 sm:py-24 lg:px-8">
             <div class="mx-auto max-w-7xl">
                 <div class="flex flex-col gap-6 md:flex-row md:items-end md:justify-between"><x-public.section-heading
                         eyebrow="Travel journal" title="Latest from the blog"
@@ -185,7 +234,7 @@
             </div>
     </section>@endif
 
-    <section class="px-4 pb-16 sm:px-6 sm:pb-24 lg:px-8">
+    <section class="bg-[#eef6fa] px-4 pb-16 sm:px-6 sm:pb-24 lg:px-8">
         <div
             class="mx-auto overflow-hidden rounded-[2rem] bg-[linear-gradient(120deg,#0b6b7e,#082d4f)] px-6 py-12 text-center text-white shadow-2xl shadow-cyan-950/20 sm:px-12 sm:py-16">
             <p class="text-xs font-bold uppercase tracking-[.24em] text-cyan-200">Start planning</p>

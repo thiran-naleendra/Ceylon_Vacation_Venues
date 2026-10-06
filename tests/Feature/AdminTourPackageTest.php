@@ -152,6 +152,23 @@ class AdminTourPackageTest extends TestCase
             ->assertForbidden();
     }
 
+    public function test_delete_action_is_only_shown_to_users_authorized_to_delete_packages(): void
+    {
+        $package = TourPackage::factory()->create();
+
+        $this->actingAs(User::factory()->administrator()->create())
+            ->get(route('admin.packages.index'))
+            ->assertOk()
+            ->assertSee('action="'.route('admin.packages.destroy', $package).'"', false)
+            ->assertSeeText('Delete');
+
+        $this->actingAs(User::factory()->editor()->create())
+            ->get(route('admin.packages.index'))
+            ->assertOk()
+            ->assertDontSee('action="'.route('admin.packages.destroy', $package).'"', false)
+            ->assertDontSeeText('Delete');
+    }
+
     public function test_deletion_is_blocked_for_inquiry_history_and_removes_files_otherwise(): void
     {
         $administrator = User::factory()->administrator()->create();

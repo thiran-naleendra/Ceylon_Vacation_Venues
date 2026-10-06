@@ -7,6 +7,7 @@ use App\Http\Requests\Public\IndexVehicleRequest;
 use App\Models\BlogPost;
 use App\Models\GalleryImage;
 use App\Models\Page;
+use App\Models\Property;
 use App\Models\TourPackage;
 use App\Models\Vehicle;
 use App\Models\VehicleCategory;
@@ -41,7 +42,8 @@ class SiteController extends Controller
         }
 
         $page->loadMissing(['sections', 'seoMetadata']);
-        $featuredPackages = TourPackage::query()->published()->featured()->with('featuredImage')->ordered()->limit(3)->get();
+        $featuredPackages = TourPackage::query()->published()->with('featuredImage')->orderByDesc('is_featured')->ordered()->limit(3)->get();
+        $featuredProperties = Property::query()->published()->whereHas('type', fn ($query) => $query->published())->with(['type:id,name,slug', 'featuredImage'])->orderByDesc('is_featured')->ordered()->limit(3)->get();
         $featuredVehicles = Vehicle::query()->published()->featured()->with(['category', 'featuredImage'])->ordered()->limit(3)->get();
         $galleryImages = GalleryImage::query()->visible()->published()->whereHas('album', fn ($query) => $query->published())->with('album:id,title,slug')->ordered()->limit(6)->get();
         $latestPosts = BlogPost::query()->published()->with(['category:id,name,slug', 'author:id,name'])->latest('published_at')->limit(3)->get();
@@ -50,7 +52,7 @@ class SiteController extends Controller
         $image = data_get($hero, 'image.path') ? Storage::disk(data_get($hero, 'image.disk', 'public'))->url(data_get($hero, 'image.path')) : null;
         $seo = $this->seo->make($page, url('/'), $page->title, $page->summary, $image, [['name' => 'Home', 'url' => url('/')]], [$this->seo->organization(), $this->seo->website()]);
 
-        return view('public.home', compact('page', 'hero', 'seo', 'featuredPackages', 'featuredVehicles', 'galleryImages', 'latestPosts', 'destinations'));
+        return view('public.home', compact('page', 'hero', 'seo', 'featuredPackages', 'featuredProperties', 'featuredVehicles', 'galleryImages', 'latestPosts', 'destinations'));
     }
 
     public function fixedPage(Request $request): View
@@ -92,9 +94,9 @@ class SiteController extends Controller
         $this->sortPackages($packages, $filters['sort'] ?? 'recommended');
         $packages = $packages->paginate(12)->withQueryString();
         $destinations = TourPackage::query()->published()->whereNotNull('destination')->where('destination', '!=', '')->distinct()->orderBy('destination')->pluck('destination');
-        $schema = $this->seo->breadcrumbs([['name' => 'Home', 'url' => url('/')], ['name' => 'Tour Packages', 'url' => route('packages.index')]]);
+        ['page' => $page, 'hero' => $hero, 'seo' => $seo] = $this->listingPage('tour-packages', 'Tour Packages', 'Explore curated Sri Lanka tour packages for memorable journeys across the island.', route('packages.index'));
 
-        return view('public.packages.index', compact('packages', 'destinations', 'filters', 'schema'));
+        return view('public.packages.index', compact('packages', 'destinations', 'filters', 'page', 'hero', 'seo'));
     }
 
     public function package(TourPackage $package): View
@@ -129,9 +131,9 @@ class SiteController extends Controller
         $vehicles = $vehicles->paginate(12)->withQueryString();
         $categories = VehicleCategory::query()->published()->ordered()->get(['id', 'name', 'slug']);
         $transmissions = Vehicle::query()->published()->whereNotNull('transmission')->distinct()->orderBy('transmission')->pluck('transmission');
-        $schema = $this->seo->breadcrumbs([['name' => 'Home', 'url' => url('/')], ['name' => 'Vehicle Rental', 'url' => route('vehicles.index')]]);
+        ['page' => $page, 'hero' => $hero, 'seo' => $seo] = $this->listingPage('vehicle-rental', 'Vehicle Rental', 'Find the right vehicle for a comfortable and flexible journey around Sri Lanka.', route('vehicles.index'));
 
-        return view('public.vehicles.index', compact('vehicles', 'categories', 'transmissions', 'filters', 'schema'));
+        return view('public.vehicles.index', compact('vehicles', 'categories', 'transmissions', 'filters', 'page', 'hero', 'seo'));
     }
 
     public function vehicle(Vehicle $vehicle): View
@@ -182,6 +184,11 @@ class SiteController extends Controller
     private function preferredPageRoute(string $pageKey): ?string
     {
         return match ($pageKey) {
+            'tour-packages' => 'packages.index',
+            'villas-houses' => 'properties.index',
+            'vehicle-rental' => 'vehicles.index',
+            'gallery' => 'gallery.index',
+            'blog' => 'blog.index',
             'about' => 'about',
             'visa-extension' => 'services.visa',
             'baggage-transport' => 'services.baggage',
@@ -190,6 +197,24 @@ class SiteController extends Controller
             'terms-and-conditions' => 'terms',
             default => null,
         };
+    }
+
+    /** @return array{page: Page, hero: array<string, mixed>, seo: array<string, mixed>} */
+    private function listingPage(string $pageKey, string $title, string $summary, string $url): array
+    {
+        $page = Page::query()->where('page_key', $pageKey)->published()->with(['sections', 'seoMetadata'])->first();
+
+        if ($page === null) {
+            $page = (new Page)->forceFill(['page_key' => $pageKey, 'title' => $title, 'summary' => $summary]);
+            $page->setRelation('sections', collect());
+            $page->setRelation('seoMetadata', null);
+        }
+
+        $hero = $page->sections->firstWhere('section_key', 'hero')?->content ?? [];
+        $image = data_get($hero, 'image.path') ? Storage::disk(data_get($hero, 'image.disk', 'public'))->url(data_get($hero, 'image.path')) : null;
+        $breadcrumbs = [['name' => 'Home', 'url' => url('/')], ['name' => $page->title, 'url' => $url]];
+
+        return ['page' => $page, 'hero' => $hero, 'seo' => $this->seo->make($page, $url, $page->title, $page->summary, $image, $breadcrumbs)];
     }
 
     private function pageView(Page $page, string $url, array $schemas): View

@@ -17,6 +17,6 @@ class UpdatePropertyStatusRequest extends FormRequest
 
     public function rules(): array
     {
-        return ['status' => ['sometimes', Rule::enum(PublicationStatus::class)], 'is_featured' => ['sometimes', 'boolean']];
+        return ['status' => ['sometimes', Rule::enum(PublicationStatus::class)], 'is_featured' => ['sometimes', 'boolean'], 'is_negotiable' => ['sometimes', 'boolean']];
     }
 }

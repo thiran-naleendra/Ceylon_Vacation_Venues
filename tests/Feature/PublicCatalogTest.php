@@ -101,6 +101,7 @@ class PublicCatalogTest extends TestCase
         $vehicle = Vehicle::factory()->for($category, 'category')->published()->create([
             'title' => 'Island Family Car', 'availability_status' => VehicleAvailability::Unavailable,
             'seats' => 6, 'luggage_capacity' => 3, 'transmission' => 'automatic', 'fuel_type' => 'petrol', 'rental_terms' => 'Valid licence required.',
+            'additional_features' => "Bluetooth audio\nChild seat available",
         ]);
         VehicleImage::factory()->for($vehicle)->create([
             'alt_text' => 'Blue family rental car',
@@ -115,6 +116,9 @@ class PublicCatalogTest extends TestCase
             ->assertSeeText('6')
             ->assertSeeText('3 bags')
             ->assertSeeText('Automatic')
+            ->assertSeeText('Additional features')
+            ->assertSeeText('Bluetooth audio')
+            ->assertSeeText('Child seat available')
             ->assertSeeText('Valid licence required.')
             ->assertSeeText('Related Touring Car')
             ->assertSee(route('inquiries.rental.create', $vehicle), false)

@@ -4,10 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Models\BlogCategory;
 use App\Models\BlogPost;
+use App\Models\Page;
 use App\Services\AllowedHtmlSanitizer;
 use App\Services\PublicSiteData;
 use App\Services\SeoManager;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
 class BlogController extends Controller
@@ -30,9 +32,18 @@ class BlogController extends Controller
             ->paginate(12)
             ->withQueryString();
         $categories = BlogCategory::query()->published()->select(['id', 'name', 'slug'])->withCount(['posts' => fn ($query) => $query->published()])->ordered()->get();
-        $schema = $this->seo->breadcrumbs([['name' => 'Home', 'url' => url('/')], ['name' => 'Blog', 'url' => route('blog.index')]]);
+        $page = Page::query()->where('page_key', 'blog')->published()->with(['sections', 'seoMetadata'])->first();
+        if ($page === null) {
+            $page = (new Page)->forceFill(['page_key' => 'blog', 'title' => 'Blog', 'summary' => 'Read destination ideas and practical guidance for planning your Sri Lankan journey.']);
+            $page->setRelation('sections', collect());
+            $page->setRelation('seoMetadata', null);
+        }
+        $hero = $page->sections->firstWhere('section_key', 'hero')?->content ?? [];
+        $image = data_get($hero, 'image.path') ? Storage::disk(data_get($hero, 'image.disk', 'public'))->url(data_get($hero, 'image.path')) : null;
+        $url = route('blog.index');
+        $seo = $this->seo->make($page, $url, $page->title, $page->summary, $image, [['name' => 'Home', 'url' => url('/')], ['name' => $page->title, 'url' => $url]]);
 
-        return view('public.blog.index', compact('posts', 'featuredPost', 'categories', 'filters', 'schema'));
+        return view('public.blog.index', compact('posts', 'featuredPost', 'categories', 'filters', 'page', 'hero', 'seo'));
     }
 
     public function show(BlogPost $post): View

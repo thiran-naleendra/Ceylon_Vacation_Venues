@@ -52,6 +52,12 @@ class PublicServicePagesTest extends TestCase
             ->assertOk()
             ->assertSeeText('Airport Baggage Recovery')
             ->assertSee('action="'.route('inquiries.baggage.store').'"', false)
+            ->assertSeeText('Arrival airport')
+            ->assertSeeText('Airline and flight number')
+            ->assertSeeText('Baggage report/reference number')
+            ->assertSeeText('Describe your missing baggage')
+            ->assertDontSeeText('Delivery location')
+            ->assertDontSeeText('Estimated weight')
             ->assertDontSeeText('Private draft copy.');
     }
 

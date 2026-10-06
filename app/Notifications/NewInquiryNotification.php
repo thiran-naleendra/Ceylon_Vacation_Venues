@@ -61,7 +61,7 @@ class NewInquiryNotification extends Notification implements ShouldQueue
             InquiryType::Property => 'New Villa & House Inquiry - Ceylon Vacation Venues',
             InquiryType::Rental => 'New Vehicle Rental Inquiry - Ceylon Vacation Venues',
             InquiryType::Visa => 'New Visa Extension Request - Ceylon Vacation Venues',
-            InquiryType::Baggage => 'New Baggage Transport Request - Ceylon Vacation Venues',
+            InquiryType::Baggage => 'New Lost Baggage Recovery Request - Ceylon Vacation Venues',
             InquiryType::General => 'New Contact Message - Ceylon Vacation Venues',
         };
 
@@ -75,7 +75,7 @@ class NewInquiryNotification extends Notification implements ShouldQueue
             InquiryType::Property => 'Villa & House Inquiry',
             InquiryType::Rental => 'Vehicle Rental Inquiry',
             InquiryType::Visa => 'Visa Extension Request',
-            InquiryType::Baggage => 'Baggage Transport Request',
+            InquiryType::Baggage => 'Lost Baggage Recovery Request',
             InquiryType::General => 'Contact Message',
         };
     }
@@ -115,12 +115,10 @@ class NewInquiryNotification extends Notification implements ShouldQueue
             $this->add($details, 'Current visa expiry', $detail->current_visa_expiry_date?->format('F j, Y'));
             $this->add($details, 'Requested extension', $detail->requested_extension_days ? "{$detail->requested_extension_days} days" : null);
         } elseif ($detail = $this->inquiry->baggageDetails) {
-            $this->add($details, 'Pickup date/time', $detail->pickup_at?->format('F j, Y g:i A'));
-            $this->add($details, 'Pickup location', $detail->pickup_location);
-            $this->add($details, 'Delivery location', $detail->delivery_location);
-            $details['Bags'] = (string) $detail->bag_count;
-            $this->add($details, 'Estimated weight', $detail->estimated_weight_kg ? "{$detail->estimated_weight_kg} kg" : null);
-            $this->add($details, 'Special instructions', $detail->special_instructions);
+            $this->add($details, 'Arrival airport', $detail->pickup_location);
+            $this->add($details, 'Airline and flight number', $detail->delivery_location);
+            $details['Missing bags'] = (string) $detail->bag_count;
+            $this->add($details, 'Baggage report/reference', $detail->special_instructions);
         }
 
         $this->add($details, 'Subject', $this->inquiry->subject);

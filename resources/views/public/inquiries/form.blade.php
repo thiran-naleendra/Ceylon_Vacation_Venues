@@ -1,5 +1,5 @@
 @php
-    $title = match ($type) { App\Enums\InquiryType::Package => 'Enquire about ' . $subject->title, App\Enums\InquiryType::Rental => 'Rent ' . $subject->title, App\Enums\InquiryType::Property => 'Enquire about ' . $subject->name, App\Enums\InquiryType::Visa => 'Visa assistance inquiry', App\Enums\InquiryType::Baggage => 'Baggage transport inquiry', default => 'Contact us'};
+    $title = match ($type) { App\Enums\InquiryType::Package => 'Enquire about ' . $subject->title, App\Enums\InquiryType::Rental => 'Rent ' . $subject->title, App\Enums\InquiryType::Property => 'Enquire about ' . $subject->name, App\Enums\InquiryType::Visa => 'Visa assistance inquiry', App\Enums\InquiryType::Baggage => 'Lost baggage recovery request', default => 'Contact us'};
     $action = match ($type) { App\Enums\InquiryType::Package => route('inquiries.package.store', $subject), App\Enums\InquiryType::Rental => route('inquiries.rental.store', $subject), App\Enums\InquiryType::Property => route('inquiries.property.store', $subject), App\Enums\InquiryType::Visa => route('inquiries.visa.store'), App\Enums\InquiryType::Baggage => route('inquiries.baggage.store'), default => route('inquiries.contact.store')};
     $input = 'min-h-12 w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-base outline-none focus:border-sky-600 focus:ring-2 focus:ring-sky-100';
 @endphp
@@ -106,33 +106,27 @@
                         </section>
                     @elseif($type === App\Enums\InquiryType::Baggage)
                         <section>
-                            <h2 class="text-lg font-semibold">Transport details</h2>
+                            <h2 class="text-lg font-semibold">Missing baggage details</h2>
                             <div class="mt-4 grid grid-cols-1 gap-5 sm:grid-cols-2"><x-admin.form-field name="pickup_location"
-                                    label="Pickup location" required><input name="pickup_location"
+                                    label="Arrival airport" required><input name="pickup_location"
                                         value="{{ old('pickup_location') }}"
                                         class="{{ $input }}"></x-admin.form-field><x-admin.form-field name="delivery_location"
-                                    label="Delivery location" required><input name="delivery_location"
+                                    label="Airline and flight number" required><input name="delivery_location"
                                         value="{{ old('delivery_location') }}"
-                                        class="{{ $input }}"></x-admin.form-field><x-admin.form-field name="pickup_at"
-                                    label="Pickup date and time" required><input name="pickup_at" type="datetime-local"
-                                        value="{{ old('pickup_at') }}"
+                                        class="{{ $input }}"></x-admin.form-field><x-admin.form-field name="special_instructions"
+                                    label="Baggage report/reference number"><input name="special_instructions"
+                                        value="{{ old('special_instructions') }}"
                                         class="{{ $input }}"></x-admin.form-field><x-admin.form-field name="bag_count"
-                                    label="Number of bags" required><input name="bag_count" type="number" min="1" max="100"
+                                    label="Number of missing bags" required><input name="bag_count" type="number" min="1" max="100"
                                         value="{{ old('bag_count', 1) }}"
-                                        class="{{ $input }}"></x-admin.form-field><x-admin.form-field name="estimated_weight_kg"
-                                    label="Estimated weight (kg)"><input name="estimated_weight_kg" type="number" min="0"
-                                        step="0.01" value="{{ old('estimated_weight_kg') }}"
-                                        class="{{ $input }}"></x-admin.form-field><x-admin.form-field
-                                    name="special_instructions" label="Special instructions" class="sm:col-span-2"><textarea
-                                        name="special_instructions" rows="3"
-                                        class="{{ $input }}">{{ old('special_instructions') }}</textarea></x-admin.form-field>
+                                        class="{{ $input }}"></x-admin.form-field>
                             </div>
                     </section>@endif
                     <section>
                         <div class="grid gap-5">@if($type === App\Enums\InquiryType::General)<x-admin.form-field
                             name="subject" label="Subject" required><input name="subject" value="{{ old('subject') }}"
                         class="{{ $input }}"></x-admin.form-field>@endif<x-admin.form-field name="message"
-                                label="Message" :required="$type === App\Enums\InquiryType::General"><textarea name="message"
+                                :label="$type === App\Enums\InquiryType::Baggage ? 'Describe your missing baggage' : 'Message'" :required="in_array($type, [App\Enums\InquiryType::General, App\Enums\InquiryType::Baggage], true)"><textarea name="message"
                                     rows="5" class="{{ $input }}">{{ old('message') }}</textarea></x-admin.form-field><label
                                 class="flex items-start gap-3 rounded-xl bg-slate-50 p-4 text-sm"><input type="checkbox"
                                     name="privacy_accepted" value="1" class="mt-1 size-5 shrink-0"

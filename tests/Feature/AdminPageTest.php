@@ -23,13 +23,36 @@ class AdminPageTest extends TestCase
         Storage::fake('public');
     }
 
-    public function test_seeder_creates_the_eight_fixed_pages_without_duplicates(): void
+    public function test_seeder_creates_all_fixed_pages_without_duplicates(): void
     {
         $this->seed(PageSeeder::class);
         $this->seed(PageSeeder::class);
 
-        $this->assertDatabaseCount('pages', 8);
-        $this->assertSame(['about', 'baggage-transport', 'contact', 'home', 'privacy-policy', 'terms-and-conditions', 'villas-houses', 'visa-extension'], Page::query()->orderBy('page_key')->pluck('page_key')->all());
+        $this->assertDatabaseCount('pages', 12);
+        $this->assertSame(['about', 'baggage-transport', 'blog', 'contact', 'gallery', 'home', 'privacy-policy', 'terms-and-conditions', 'tour-packages', 'vehicle-rental', 'villas-houses', 'visa-extension'], Page::query()->orderBy('page_key')->pluck('page_key')->all());
+    }
+
+    public function test_pages_index_displays_every_managed_page_in_public_navigation_order(): void
+    {
+        $this->seed(PageSeeder::class);
+
+        $this->actingAs(User::factory()->editor()->create())
+            ->get(route('admin.pages.index'))
+            ->assertOk()
+            ->assertSeeTextInOrder([
+                'Home',
+                'Tour Packages',
+                'Villas & Houses',
+                'Vehicle Rental',
+                'Visa Assistance',
+                'Airport Baggage Recovery',
+                'Gallery',
+                'Blog',
+                'About Us',
+                'Contact Us',
+                'Privacy Policy',
+                'Terms & Conditions',
+            ]);
     }
 
     public function test_editor_can_update_page_hero_seo_and_sanitized_content(): void
